@@ -58,10 +58,10 @@ const DashboardSidebar = ({ isOpen, setIsOpen }) => {
         {/* Header */}
         <div className="p-4 border-b flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#38909D]  rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">CS</span>
             </div>
-            <span className="text-xl font-bold gradient-text">ClubSphere</span>
+            <span className="text-xl text-[#38909D] font-bold hidden sm:block">Club <span className="text-[#F6851F]">Sphere</span></span>
           </Link>
           <button className="lg:hidden btn btn-ghost btn-sm btn-square" onClick={() => setIsOpen(false)}>
             <FiX size={20} />
@@ -76,7 +76,7 @@ const DashboardSidebar = ({ isOpen, setIsOpen }) => {
                 <img
                   src={
                     dbUser?.photoURL ||
-                    `https://ui-avatars.com/api/?name=${dbUser?.name || "User"}&background=2563eb&color=fff`
+                    `https://ui-avatars.com/api/?name=${dbUser?.name || "User"}&background=38909D&color=fff`
                   }
                   alt={dbUser?.name}
                 />
@@ -84,7 +84,7 @@ const DashboardSidebar = ({ isOpen, setIsOpen }) => {
             </div>
             <div>
               <p className="font-semibold text-sm">{dbUser?.name}</p>
-              <span className="badge badge-primary badge-sm">{getRoleLabel()}</span>
+              <span className="badge bg-[#ed9548b7]  p-2 badge-sm">{getRoleLabel()}</span>
             </div>
           </div>
         </div>

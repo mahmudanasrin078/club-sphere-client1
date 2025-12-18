@@ -26,25 +26,27 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-base-100 shadow-md sticky top-0 z-50">
+    <div className="">
+
+      <nav className="bg-base-100 shadow-md sticky top-0 z-50 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#38909D] rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-xl">CS</span>
             </div>
-            <span className="text-xl font-bold gradient-text hidden sm:block">ClubSphere</span>
+            <span className="text-xl text-[#38909D] font-bold hidden sm:block">Club <span className="text-[#F6851F]">Sphere</span></span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-6 text-[#38909D]">
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `font-medium transition-colors ${isActive ? "text-primary" : "text-neutral hover:text-primary"}`
+                  `font-medium  transition-colors ${isActive ? "text-[#38909D] " : "text-neutral hover:text-[#F6851F] hover:underline"}`
                 }
               >
                 {link.label}
@@ -52,16 +54,16 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Auth Section */}
+          {/* Auth section */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                  <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <div className="w-10 rounded-full ring ring-[#38909D] ring-offset-base-100 ring-offset-2">
                     <img
                       src={
                         user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=2563eb&color=fff`
+                        `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=38909D&color=fff`
                       }
                       alt={user.displayName}
                     />
@@ -107,7 +109,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden pb-4">
             <div className="flex flex-col gap-2">
@@ -155,6 +157,7 @@ const Navbar = () => {
         )}
       </div>
     </nav>
+    </div>
   )
 }
 
