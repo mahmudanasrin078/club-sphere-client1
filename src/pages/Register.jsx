@@ -1,5 +1,5 @@
-"use client"
 
+import React from "react";
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
@@ -69,7 +69,7 @@ const Register = () => {
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold">Create Account</h1>
+            <h1 className="text-2xl font-bold mb-2">Create <span className="text-[#F6851F]">Account</span></h1>
             <p className="text-base-content/60">Join ClubSphere today</p>
           </div>
 
@@ -88,8 +88,8 @@ const Register = () => {
                   {...register("name", {
                     required: "Name is required",
                     minLength: {
-                      value: 2,
-                      message: "Name must be at least 2 characters",
+                      value: 4,
+                      message: "Name must be at least 4 characters",
                     },
                   })}
                 />
@@ -131,14 +131,14 @@ const Register = () => {
             {/* Photo URL */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Photo URL (optional)</span>
+                <span className="label-text">Photo URL</span>
               </label>
-              <div className="relative">
+              <div className="relative ">
                 <FiImage className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
                 <input
-                  type="url"
-                  placeholder="https://example.com/photo.jpg"
-                  className="input input-bordered w-full pl-10"
+                  type="file"
+                  placeholder="Your photo"
+                  className="input input-bordered w-full pl-10 pt-2"
                   {...register("photoURL")}
                 />
               </div>
@@ -203,7 +203,7 @@ const Register = () => {
               )}
             </div>
 
-            <button type="submit" disabled={loading} className="btn btn-primary w-full">
+            <button type="submit" disabled={loading} className="btn bg-[#38909D] text-white w-full">
               {loading ? <span className="loading loading-spinner loading-sm"></span> : "Create Account"}
             </button>
           </form>

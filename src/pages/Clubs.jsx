@@ -79,7 +79,8 @@ const Clubs = () => {
 
   return (
     <div className="section-padding max-w-7xl mx-auto">
-      <SectionTitle title="Browse Clubs" subtitle="Discover amazing clubs and communities in your area" />
+      <SectionTitle title="Browse "
+      span='Clubs' subtitle="Discover amazing clubs and communities in your area" />
 
       {/* Search and Filters */}
       <div className="mb-8 space-y-4">
@@ -95,7 +96,7 @@ const Clubs = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn bg-[#38909D] text-white">
             Search
           </button>
         </form>
@@ -108,7 +109,7 @@ const Clubs = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
-                className={`btn btn-sm ${category === cat ? "btn-primary" : "btn-outline"}`}
+                className={`btn btn-sm ${category === cat ? "bg-[#38909D] " : "btn-outline "}`}
               >
                 {cat}
               </button>
