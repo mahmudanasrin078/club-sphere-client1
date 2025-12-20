@@ -1,4 +1,4 @@
-"use client"
+
 
 import { Outlet } from "react-router-dom"
 import DashboardSidebar from "../components/dashboard/DashboardSidebar"

@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
@@ -24,10 +24,13 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setLoading(true)
+
     try {
       await loginUser(data.email, data.password)
       toast.success("Login successful!")
+
       navigate(from, { replace: true })
+
     } catch (error) {
       toast.error(error.message || "Login failed")
     } finally {
@@ -52,9 +55,9 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center section-padding">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold">Welcome Back</h1>
-            <p className="text-base-content/60">Sign in to continue to ClubSphere</p>
+          <div className="text-center mb-3">
+            <h1 className="text-2xl font-bold mb-1">Welcome <span className="text-[#F6851F]">Back</span></h1>
+            <p className=" text-base-content/60">Sign in to continue to ClubSphere</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -115,14 +118,14 @@ const Login = () => {
               )}
             </div>
 
-            <button type="submit" disabled={loading} className="btn btn-primary w-full">
+            <button type="submit" disabled={loading} className="btn bg-[#38909D] hover:bg-[#F6851F]  text-white w-full">
               {loading ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"}
             </button>
           </form>
 
           <div className="divider">OR</div>
 
-          <button onClick={handleGoogleLogin} disabled={loading} className="btn btn-outline w-full gap-2">
+          <button onClick={handleGoogleLogin} disabled={loading} className="btn btn-outline w-full gap-2 hover:bg-[#F6851F] ">
             <FcGoogle size={20} />
             Continue with Google
           </button>

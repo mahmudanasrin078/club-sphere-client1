@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useAuth } from "../../hooks/useAuth"
 import { useRole } from "../../hooks/useRole"
@@ -28,7 +28,7 @@ const Profile = () => {
         <div className="card-body">
           <div className="flex flex-col sm:flex-row items-center gap-6 mb-6">
             <div className="avatar">
-              <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              <div className="w-24 rounded-full ring bg-[bg-[#38909D]] ring-offset-base-100 ring-offset-2">
                 <img
                   src={
                     user?.photoURL ||
@@ -40,8 +40,8 @@ const Profile = () => {
               </div>
             </div>
             <div className="text-center sm:text-left">
-              <h2 className="text-xl font-bold">{dbUser?.name || user?.displayName}</h2>
-              <span className={`badge ${getRoleBadgeColor()} capitalize`}>
+              <h2 className="text-xl mb-2 font-bold">{dbUser?.name || user?.displayName}</h2>
+              <span className={`bg-[#38909D] p-3 badge ${getRoleBadgeColor()} capitalize`}>
                 {role === "clubManager" ? "Club Manager" : role}
               </span>
             </div>
@@ -52,7 +52,7 @@ const Profile = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg">
-                <FiUser className="text-primary" size={20} />
+                <FiUser className="text-[#38909D]" size={20} />
               </div>
               <div>
                 <p className="text-sm text-base-content/60">Full Name</p>

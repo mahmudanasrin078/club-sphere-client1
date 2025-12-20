@@ -1,4 +1,4 @@
-"use client";
+
 
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
@@ -70,9 +70,9 @@ const Navbar = () => {
                     <div className="w-10 rounded-full ring ring-[#38909D] ring-offset-base-100 ring-offset-2">
                       <img
                         src={
-                          user.photoURL ||
+                          user?.photoURL ||
                           `https://ui-avatars.com/api/?name=${
-                            user.displayName || "User"
+                            user?.displayName || "User"
                           }&background=38909D&color=fff`
                         }
                         alt={user.displayName}
@@ -85,7 +85,7 @@ const Navbar = () => {
                   >
                     <li className="menu-title">
                       <span className="text-sm font-semibold">
-                        {user.displayName}
+                        {user?.displayName}
                       </span>
                       <span className="text-xs text-base-content/60 capitalize">
                         {dbUser?.role || "Member"}
@@ -113,7 +113,10 @@ const Navbar = () => {
                   <Link to="/login" className="btn btn-ghost">
                     Login
                   </Link>
-                  <Link to="/register" className="btn bg-[#38909D] text-white">
+                  <Link
+                    to="/register"
+                    className="btn bg-[#38909D] hover:bg-[#F6851F] text-white"
+                  >
                     Register
                   </Link>
                 </>
@@ -171,7 +174,10 @@ const Navbar = () => {
                     <Link to="/login" className="btn btn-ghost flex-1">
                       Login
                     </Link>
-                    <Link to="/register" className="btn bg-[#38909D] flex-1">
+                    <Link
+                      to="/register"
+                      className="btn bg-[#38909D] hover:bg-[#F6851F] flex-1"
+                    >
                       Register
                     </Link>
                   </div>

@@ -1,4 +1,4 @@
-"use client"
+
 
 import { Link, NavLink, useLocation } from "react-router-dom"
 import { useRole } from "../../hooks/useRole"
@@ -58,7 +58,7 @@ const DashboardSidebar = ({ isOpen, setIsOpen }) => {
         {/* Header */}
         <div className="p-4 border-b flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[#38909D]  rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#38909D] rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">CS</span>
             </div>
             <span className="text-xl text-[#38909D] font-bold hidden sm:block">Club <span className="text-[#F6851F]">Sphere</span></span>
@@ -98,19 +98,22 @@ const DashboardSidebar = ({ isOpen, setIsOpen }) => {
                   to={link.to}
                   end={link.to.split("/").length <= 3}
                   onClick={() => setIsOpen(false)}
-                  className={({ isActive }) => `flex items-center gap-3 ${isActive ? "active" : ""}`}
+                  className={({ isActive }) => `flex items-center gap-3${isActive ? "active" : ""}`}
                 >
                   <link.icon size={18} />
                   {link.label}
                 </NavLink>
               </li>
             ))}
+
             <div className="divider my-2"></div>
-            <li>
+
+
+            <li className="">
               <NavLink
                 to="/dashboard/profile"
                 onClick={() => setIsOpen(false)}
-                className={({ isActive }) => `flex items-center gap-3 ${isActive ? "active" : ""}`}
+                className={({ isActive }) => `flex items-center gap-3 bg-[#38909D] text-white hover:bg-[#F6851F]${isActive ? "active" : ""}`}
               >
                 <FiUser size={18} />
                 Profile

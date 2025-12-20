@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useParams, Link, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"

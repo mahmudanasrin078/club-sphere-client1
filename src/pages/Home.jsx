@@ -1,4 +1,4 @@
-"use client";
+
 
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -116,7 +116,7 @@ const Home = () => {
               className="hidden lg:block"
             >
               <img
-                src="https://placehold.co/600x400/38909D/ffffff?text=Community+Together"
+                src="https://i.ibb.co.com/dX3JDv6/top-banner2.png"
                 alt="Community gathering"
                 className="rounded-2xl shadow-2xl"
               />
@@ -150,7 +150,10 @@ const Home = () => {
           </motion.div>
         )}
         <div className="text-center mt-8">
-          <Link to="/clubs" className="btn bg-[#38909D] text-white hover:bg-[#F6851F]">
+          <Link
+            to="/clubs"
+            className="btn bg-[#38909D] text-white hover:bg-[#F6851F]"
+          >
             View All Clubs
           </Link>
         </div>
@@ -160,7 +163,8 @@ const Home = () => {
       <section className="section-padding bg-base-200">
         <div className="max-w-7xl mx-auto">
           <SectionTitle
-            title="How ClubSphere"span=' Works'
+            title="How ClubSphere"
+            span=" Works"
             subtitle="Get started in just a few simple steps"
           />
           <motion.div
@@ -195,7 +199,7 @@ const Home = () => {
       <section className="section-padding max-w-7xl mx-auto">
         <SectionTitle
           title="Upcoming "
-          span='Events'
+          span="Events"
           subtitle="Don't miss out on these exciting community events"
         />
         {eventsLoading ? (
@@ -220,7 +224,10 @@ const Home = () => {
           </p>
         )}
         <div className="text-center mt-8">
-          <Link to="/events" className="btn bg-[#38909D] text-white hover:bg-[#F6851F]">
+          <Link
+            to="/events"
+            className="btn bg-[#38909D] text-white hover:bg-[#F6851F]"
+          >
             View All Events
           </Link>
         </div>
@@ -231,7 +238,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto">
           <SectionTitle
             title="Popular "
-            span='Categories'
+            span="Categories"
             subtitle="Find clubs that match your interests"
           />
           <motion.div
@@ -279,7 +286,10 @@ const Home = () => {
             ClubSphere
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/register" className="btn bg-[#F6851F] text-white btn-lg hover:text-black">
+            <Link
+              to="/register"
+              className="btn bg-[#F6851F] text-white btn-lg hover:text-black"
+            >
               Get Started Free
             </Link>
             <Link
