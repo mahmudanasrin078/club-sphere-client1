@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
 import { useAxiosSecure } from "../../../hooks/useAxiosSecure"
 import toast from "react-hot-toast"
+import { FiImage } from "react-icons/fi"
 
 const categories = [
   "Photography",
@@ -51,7 +52,7 @@ const CreateClub = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Create New Club</h1>
+      <h1 className="text-2xl font-bold text-[#38909D] mb-6">Create New<span className="text-[#F6851F]"> Club</span></h1>
 
       <div className="card bg-base-100 shadow-sm">
         <div className="card-body">
@@ -129,7 +130,7 @@ const CreateClub = () => {
                 )}
               </div>
             </div>
-
+          {/* banner img */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Banner Image URL</span>
@@ -141,6 +142,28 @@ const CreateClub = () => {
                 {...register("bannerImage")}
               />
             </div>
+            
+             {/* Photo URL
+                        <div className="form-control">
+                          <label className="label">
+                            <span className="label-text">Banner image</span>
+                          </label>
+                          <div className="relative ">
+                            <FiImage className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
+                            <input
+                              type="file"
+                              placeholder="Your photo"
+                              className="input input-bordered w-full pl-10 pt-2"
+                              {...register("photo", { required: "Photo is required" })}
+                            />
+                          </div>
+            
+                          {errors.photo && (
+                            <p className="text-error text-sm">{errors.photo.message}</p>
+                          )}
+                        </div> */}
+            
+            
 
             <div className="form-control">
               <label className="label">
@@ -159,11 +182,11 @@ const CreateClub = () => {
               </label>
             </div>
 
-            <div className="alert alert-info">
+            <div className="alert alert-info bg-[#ac6905] text-white">
               <span>Your club will be reviewed by an admin before it becomes visible to the public.</span>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full" disabled={createMutation.isPending}>
+            <button type="submit" className="btn bg-[#38909D] w-full text-white hover:bg-[#F6851F]" disabled={createMutation.isPending}>
               {createMutation.isPending ? "Creating..." : "Create Club"}
             </button>
           </form>

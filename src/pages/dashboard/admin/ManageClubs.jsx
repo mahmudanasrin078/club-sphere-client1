@@ -1,39 +1,37 @@
-
-
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useAxiosSecure } from "../../../hooks/useAxiosSecure"
-import LoadingSpinner from "../../../components/common/LoadingSpinner"
-import toast from "react-hot-toast"
-import Swal from "sweetalert2"
-import { FiCheck, FiX, FiUsers, FiCalendar } from "react-icons/fi"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAxiosSecure } from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { FiCheck, FiX, FiUsers, FiCalendar } from "react-icons/fi";
 
 const ManageClubs = () => {
-  const axiosSecure = useAxiosSecure()
-  const queryClient = useQueryClient()
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const { data: clubs = [], isLoading } = useQuery({
     queryKey: ["adminClubs"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/admin/clubs")
-      return res.data
+      const res = await axiosSecure.get("/admin/clubs");
+      return res.data;
     },
-  })
+  });
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }) => {
-      return axiosSecure.patch(`/admin/clubs/${id}/status`, { status })
+      return axiosSecure.patch(`/admin/clubs/${id}/status`, { status });
     },
     onSuccess: () => {
-      toast.success("Club status updated")
-      queryClient.invalidateQueries(["adminClubs"])
+      toast.success("Club status updated");
+      queryClient.invalidateQueries(["adminClubs"]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to update status")
+      toast.error(error.response?.data?.message || "Failed to update status");
     },
-  })
+  });
 
   const handleStatusChange = async (club, newStatus) => {
-    const action = newStatus === "approved" ? "approve" : "reject"
+    const action = newStatus === "approved" ? "approve" : "reject";
     const result = await Swal.fire({
       title: `${action.charAt(0).toUpperCase() + action.slice(1)} Club`,
       text: `Are you sure you want to ${action} "${club.clubName}"?`,
@@ -41,29 +39,31 @@ const ManageClubs = () => {
       showCancelButton: true,
       confirmButtonText: `Yes, ${action} it!`,
       confirmButtonColor: newStatus === "approved" ? "#22c55e" : "#ef4444",
-    })
+    });
 
     if (result.isConfirmed) {
-      updateStatusMutation.mutate({ id: club._id, status: newStatus })
+      updateStatusMutation.mutate({ id: club._id, status: newStatus });
     }
-  }
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
       case "approved":
-        return "badge-success"
+        return "bg-[#38909D] text-white p-3";
       case "rejected":
-        return "badge-error"
+        return "bg-red-500 text-white p-3";
       default:
-        return "badge-warning"
+        return "badge-warning text-white";
     }
-  }
+  };
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Manage Clubs</h1>
+      <h1 className="text-2xl font-bold text-[#38909D] mb-6">
+        Manage <span className="text-[#F6851F]">Clubs</span>
+      </h1>
 
       <div className="card bg-base-100 shadow-sm overflow-x-auto">
         <table className="table">
@@ -88,7 +88,9 @@ const ManageClubs = () => {
                         <img
                           src={
                             club.bannerImage ||
-                            `https://placehold.co/48x48/2563eb/ffffff?text=${club.clubName.charAt(0) || "/placeholder.svg"}`
+                            `https://placehold.co/48x48/2563eb/ffffff?text=${
+                              club.clubName.charAt(0) || "/placeholder.svg"
+                            }`
                           }
                           alt={club.clubName}
                         />
@@ -96,12 +98,16 @@ const ManageClubs = () => {
                     </div>
                     <div>
                       <p className="font-medium">{club.clubName}</p>
-                      <p className="text-xs text-base-content/60">{club.category}</p>
+                      <p className="text-xs text-base-content/60">
+                        {club.category}
+                      </p>
                     </div>
                   </div>
                 </td>
                 <td className="text-sm">{club.managerEmail}</td>
-                <td>{club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"}</td>
+                <td>
+                  {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"}
+                </td>
                 <td>
                   <span className="flex items-center gap-1">
                     <FiUsers size={14} /> {club.membersCount || 0}
@@ -113,21 +119,23 @@ const ManageClubs = () => {
                   </span>
                 </td>
                 <td>
-                  <span className={`badge ${getStatusBadge(club.status)}`}>{club.status}</span>
+                  <span className={`badge ${getStatusBadge(club.status)}`}>
+                    {club.status}
+                  </span>
                 </td>
                 <td>
                   {club.status === "pending" && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleStatusChange(club, "approved")}
-                        className="btn btn-success btn-xs"
+                        className="btn bg-[#38909D] text-white btn-xs"
                         disabled={updateStatusMutation.isPending}
                       >
                         <FiCheck />
                       </button>
                       <button
                         onClick={() => handleStatusChange(club, "rejected")}
-                        className="btn btn-error btn-xs"
+                        className="btn bg-red-500 text-white btn-xs"
                         disabled={updateStatusMutation.isPending}
                       >
                         <FiX />
@@ -141,7 +149,7 @@ const ManageClubs = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ManageClubs
+export default ManageClubs;

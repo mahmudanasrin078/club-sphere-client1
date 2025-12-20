@@ -57,7 +57,7 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
+      <h1 className="text-2xl font-bold mb-6">Manage <span className="text-[#F6851F]">Users</span></h1>
 
       <div className="card bg-base-100 shadow-sm overflow-x-auto">
         <table className="table">
@@ -94,10 +94,10 @@ const ManageUsers = () => {
                   <span
                     className={`badge ${
                       user.role === "admin"
-                        ? "badge-error"
+                        ? "bg-[#F6851F] text-white"
                         : user.role === "clubManager"
-                          ? "badge-secondary"
-                          : "badge-primary"
+                          ? "bg-[#49022dc2] text-white"
+                          : "bg-[#38909D] text-white"
                     }`}
                   >
                     {user.role === "clubManager" ? "Manager" : user.role}

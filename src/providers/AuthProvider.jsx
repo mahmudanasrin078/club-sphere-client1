@@ -124,6 +124,7 @@ export const AuthProvider = ({ children }) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
 
     await updateProfile(result.user, { displayName: name, photoURL: photoURL });
+    setUser({ ...user, displayName: name, photoURL: photoURL });
     setLoading(false);
     return result;
   };
