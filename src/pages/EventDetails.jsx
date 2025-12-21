@@ -73,7 +73,7 @@ const EventPaymentForm = ({ event, onSuccess }) => {
           }}
         />
       </div>
-      <button type="submit" disabled={!stripe || processing} className="btn btn-secondary w-full">
+      <button type="submit" disabled={!stripe || processing} className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full">
         {processing ? "Processing..." : `Pay $${event.eventFee}`}
       </button>
     </form>
@@ -161,7 +161,7 @@ const EventDetails = () => {
 
   return (
     <div className="section-padding max-w-7xl mx-auto">
-      <Link to="/events" className="btn btn-ghost gap-2 mb-6">
+      <Link to="/events" className="btn btn-ghost text-[#38909D] gap-2 mb-6">
         <FiArrowLeft /> Back to Events
       </Link>
 
@@ -170,51 +170,51 @@ const EventDetails = () => {
         <div className="lg:col-span-2 space-y-6">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              <Link to={`/clubs/${event.club?._id}`} className="badge badge-primary badge-lg">
+              <Link to={`/clubs/${event.club?._id}`} className="badge bg-[#38909D] text-white badge-lg">
                 {event.club?.clubName}
               </Link>
-              {event.isPaid && <span className="badge badge-warning">Paid Event</span>}
+              {event.isPaid && <span className="badge bg-[#F6851F] text-white">Paid Event</span>}
               {isPast && <span className="badge badge-error">Past Event</span>}
             </div>
 
             <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
 
             <div className="grid sm:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
-                <FiCalendar className="text-primary" size={24} />
+              <div className="flex items-center gap-3 p-4 bg-base-200  rounded-lg">
+                <FiCalendar className="text-[#38909D]" size={24} />
                 <div>
                   <p className="text-sm text-base-content/60">Date</p>
                   <p className="font-semibold">{format(eventDate, "EEEE, MMMM dd, yyyy")}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
-                <FiClock className="text-primary" size={24} />
+                <FiClock className="text-[#38909D]" size={24} />
                 <div>
                   <p className="text-sm text-base-content/60">Time</p>
                   <p className="font-semibold">{format(eventDate, "h:mm a")}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
-                <FiMapPin className="text-primary" size={24} />
+                <FiMapPin className="text-[#38909D]" size={24} />
                 <div>
                   <p className="text-sm text-base-content/60">Location</p>
                   <p className="font-semibold">{event.location}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
-                <FiUsers className="text-primary" size={24} />
+                <FiUsers className="text-[#38909D]" size={24} />
                 <div>
                   <p className="text-sm text-base-content/60">Attendees</p>
                   <p className="font-semibold">
                     {event.registrationsCount || 0}
-                    {event.maxAttendees ? ` / ${event.maxAttendees}` : ""} registered
+                    {event.maxAttendees ? ` / ${event.maxAttendees}` : ""} Registered
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="prose max-w-none">
-              <h2>About this event</h2>
+              <h2 className="text-2xl mb-3 font-bold text-[#38909D]">About this <span className="text-[#F6851F] ">event</span></h2>
               <p>{event.description}</p>
             </div>
           </div>
@@ -224,9 +224,9 @@ const EventDetails = () => {
         <div className="lg:col-span-1">
           <div className="card bg-base-100 shadow-lg sticky top-24">
             <div className="card-body">
-              <h2 className="card-title">
+              <h2 className="card-title text-[#F6851F] ">
                 <FiDollarSign />
-                {event.isPaid && event.eventFee > 0 ? `$${event.eventFee}` : "Free"} / ticket
+                {event.isPaid && event.eventFee > 0 ? `${event.eventFee}` : "Free"} 
               </h2>
 
               {registration ? (
@@ -260,7 +260,7 @@ const EventDetails = () => {
                 <button
                   onClick={handleRegister}
                   disabled={registerMutation.isPending}
-                  className="btn btn-secondary w-full"
+                  className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full"
                 >
                   {registerMutation.isPending ? "Registering..." : "Register Now"}
                 </button>

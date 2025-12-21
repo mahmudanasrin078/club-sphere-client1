@@ -74,7 +74,7 @@ const EditEvent = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Edit Event</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Edit <span className=" text-[#F6851F]">Event</span></h1>
 
       <div className="card bg-base-100 shadow-sm">
         <div className="card-body">
@@ -133,7 +133,7 @@ const EditEvent = () => {
 
             <div className="form-control">
               <label className="label cursor-pointer justify-start gap-3">
-                <input type="checkbox" className="checkbox checkbox-primary" {...register("isPaid")} />
+                <input type="checkbox" className=" accent-[#38909D]" {...register("isPaid")} />
                 <span className="label-text">This is a paid event</span>
               </label>
             </div>
@@ -154,10 +154,10 @@ const EditEvent = () => {
             )}
 
             <div className="flex gap-4">
-              <button type="button" className="btn btn-ghost flex-1" onClick={() => navigate(-1)}>
+              <button type="button" className="btn  bg-[#F6851F] text-white hover:bg-[#38909D] flex-1" onClick={() => navigate(-1)}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary flex-1" disabled={updateMutation.isPending}>
+              <button type="submit" className="btn  bg-[#38909D] text-white hover:bg-[#F6851F] flex-1" disabled={updateMutation.isPending}>
                 {updateMutation.isPending ? "Saving..." : "Save Changes"}
               </button>
             </div>

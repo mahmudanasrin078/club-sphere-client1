@@ -54,8 +54,8 @@ const ManagerEvents = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">My Events</h1>
-        <Link to="/dashboard/manager/events/create" className="btn btn-primary gap-2">
+        <h1 className="text-2xl text-[#38909D] font-bold">My <span className="text-[#F6851F]">Events</span></h1>
+        <Link to="/dashboard/manager/events/create" className="btn bg-[#38909D] text-white hover:bg-[#F6851F] gap-2">
           <FiPlus /> Create Event
         </Link>
       </div>

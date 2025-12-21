@@ -80,7 +80,7 @@ const EditClub = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Edit Club</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Edit <span className=" text-[#F6851F] ">Club</span></h1>
 
       <div className="card bg-base-100 shadow-sm">
         <div className="card-body">
@@ -167,10 +167,10 @@ const EditClub = () => {
             </div>
 
             <div className="flex gap-4">
-              <button type="button" className="btn btn-ghost flex-1" onClick={() => navigate(-1)}>
+              <button type="button" className="btn hover:bg-[#F6851F]  hover:text-white flex-1" onClick={() => navigate(-1)}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary flex-1" disabled={updateMutation.isPending}>
+              <button type="submit" className="btn bg-[#38909D] text-white hover:bg-[#F6851F] flex-1" disabled={updateMutation.isPending}>
                 {updateMutation.isPending ? "Saving..." : "Save Changes"}
               </button>
             </div>

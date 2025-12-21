@@ -29,9 +29,9 @@ const AdminOverview = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Admin <span className="text-[#F6851F] ">Dashboard</span> </h1>
 
-      {/* Stats Grid */}
+      {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard title="Total Users" value={stats?.totalUsers || 0} icon={FiUsers} color="primary" />
         <StatCard
@@ -51,7 +51,7 @@ const AdminOverview = () => {
         />
       </div>
 
-      {/* Club Status Breakdown */}
+      {/* Club Status breakdown */}
       <div className="grid lg:grid-cols-3 gap-4 mb-8">
         <div className="card bg-base-100 shadow-sm">
           <div className="card-body">
@@ -85,7 +85,7 @@ const AdminOverview = () => {
                   <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="members" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="members" fill="#38909D" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

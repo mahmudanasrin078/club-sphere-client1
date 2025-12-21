@@ -38,11 +38,11 @@ const ClubMembers = () => {
 
   return (
     <div>
-      <Link to="/dashboard/manager/clubs" className="btn btn-ghost gap-2 mb-4">
+      <Link to="/dashboard/manager/clubs" className="btn text-[#38909D] gap-2 mb-4">
         <FiArrowLeft /> Back to Clubs
       </Link>
 
-      <h1 className="text-2xl font-bold mb-6">Club Members</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Club <span className="text-[#F6851F]">Members</span></h1>
 
       <div className="card bg-base-100 shadow-sm overflow-x-auto">
         <table className="table">

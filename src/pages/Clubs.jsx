@@ -103,7 +103,7 @@ const Clubs = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-4">
-          {/* Category Filter */}
+          {/* Category filter */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -116,7 +116,7 @@ const Clubs = () => {
             ))}
           </div>
 
-          {/* Sort Dropdown */}
+          {/* Sort dropdown */}
           <select
             className="select select-bordered select-sm ml-auto"
             value={sort}

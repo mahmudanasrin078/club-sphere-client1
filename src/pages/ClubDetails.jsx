@@ -1,61 +1,76 @@
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { axiosPublic } from "../api/axiosSecure";
+import { useAuth } from "../hooks/useAuth";
+import { useAxiosSecure } from "../hooks/useAxiosSecure";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { useState } from "react";
+import {
+  FiMapPin,
+  FiUsers,
+  FiDollarSign,
+  FiCalendar,
+  FiArrowLeft,
+} from "react-icons/fi";
+import { format } from "date-fns";
 
-
-import { useParams, Link, useNavigate } from "react-router-dom"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { loadStripe } from "@stripe/stripe-js"
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js"
-import { axiosPublic } from "../api/axiosSecure"
-import { useAuth } from "../hooks/useAuth"
-import { useAxiosSecure } from "../hooks/useAxiosSecure"
-import LoadingSpinner from "../components/common/LoadingSpinner"
-import toast from "react-hot-toast"
-import Swal from "sweetalert2"
-import { useState } from "react"
-import { FiMapPin, FiUsers, FiDollarSign, FiCalendar, FiArrowLeft } from "react-icons/fi"
-import { format } from "date-fns"
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const PaymentForm = ({ club, onSuccess }) => {
-  const stripe = useStripe()
-  const elements = useElements()
-  const axiosSecure = useAxiosSecure()
-  const [processing, setProcessing] = useState(false)
+  const stripe = useStripe();
+  const elements = useElements();
+  const axiosSecure = useAxiosSecure();
+  const [processing, setProcessing] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
+    e.preventDefault();
+    if (!stripe || !elements) return;
 
-    setProcessing(true)
+    setProcessing(true);
 
     try {
-      const { data } = await axiosSecure.post("/payments/create-payment-intent", {
-        clubId: club._id,
-      })
+      const { data } = await axiosSecure.post(
+        "/payments/create-payment-intent",
+        {
+          clubId: club._id,
+        }
+      );
 
-      const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      })
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        data.clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+          },
+        }
+      );
 
       if (error) {
-        toast.error(error.message)
+        toast.error(error.message);
       } else if (paymentIntent.status === "succeeded") {
         await axiosSecure.post("/payments/confirm", {
           paymentIntentId: paymentIntent.id,
           type: "membership",
           clubId: club._id,
-        })
-        toast.success("Payment successful! Welcome to the club!")
-        onSuccess()
+        });
+        toast.success("Payment successful! Welcome to the club!");
+        onSuccess();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Payment failed")
+      toast.error(error.response?.data?.message || "Payment failed");
     } finally {
-      setProcessing(false)
+      setProcessing(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,68 +87,72 @@ const PaymentForm = ({ club, onSuccess }) => {
           }}
         />
       </div>
-      <button type="submit" disabled={!stripe || processing} className="btn btn-primary w-full">
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full"
+      >
         {processing ? "Processing..." : `Pay $${club.membershipFee}`}
       </button>
     </form>
-  )
-}
+  );
+};
 
 const ClubDetails = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const { user, dbUser } = useAuth()
-  const axiosSecure = useAxiosSecure()
-  const queryClient = useQueryClient()
-  const [showPayment, setShowPayment] = useState(false)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, dbUser } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+  const [showPayment, setShowPayment] = useState(false);
 
   const { data: club, isLoading } = useQuery({
     queryKey: ["club", id],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/clubs/${id}`)
-      return res.data
+      const res = await axiosPublic.get(`/clubs/${id}`);
+      return res.data;
     },
-  })
+  });
 
   const { data: membership } = useQuery({
     queryKey: ["membership", id, user?.email],
     queryFn: async () => {
-      if (!user) return null
-      const res = await axiosSecure.get("/member/memberships")
-      return res.data.find((m) => m.clubId.toString() === id)
+      if (!user) return null;
+      const res = await axiosSecure.get("/member/memberships");
+      return res.data.find((m) => m.clubId.toString() === id);
     },
     enabled: !!user,
-  })
+  });
 
   const { data: events = [] } = useQuery({
     queryKey: ["clubEvents", id],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/events?clubId=${id}&upcoming=true`)
-      return res.data
+      const res = await axiosPublic.get(`/events?clubId=${id}&upcoming=true`);
+      return res.data;
     },
-  })
+  });
 
   const joinMutation = useMutation({
     mutationFn: async () => {
-      return axiosSecure.post(`/clubs/${id}/join`)
+      return axiosSecure.post(`/clubs/${id}/join`);
     },
     onSuccess: () => {
-      toast.success("Successfully joined the club!")
-      queryClient.invalidateQueries(["membership", id])
+      toast.success("Successfully joined the club!");
+      queryClient.invalidateQueries(["membership", id]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to join club")
+      toast.error(error.response?.data?.message || "Failed to join club");
     },
-  })
+  });
 
   const handleJoin = async () => {
     if (!user) {
-      navigate("/login", { state: { from: `/clubs/${id}` } })
-      return
+      navigate("/login", { state: { from: `/clubs/${id}` } });
+      return;
     }
 
     if (club.membershipFee > 0) {
-      setShowPayment(true)
+      setShowPayment(true);
     } else {
       const result = await Swal.fire({
         title: "Join Club",
@@ -141,31 +160,31 @@ const ClubDetails = () => {
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Yes, Join!",
-      })
+      });
 
       if (result.isConfirmed) {
-        joinMutation.mutate()
+        joinMutation.mutate();
       }
     }
-  }
+  };
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   if (!club) {
     return (
       <div className="section-padding text-center">
         <h2 className="text-2xl font-bold">Club not found</h2>
-        <Link to="/clubs" className="btn btn-primary mt-4">
+        <Link to="/clubs" className="btn bg-[#38909D]   mt-4">
           Browse Clubs
         </Link>
       </div>
-    )
+    );
   }
 
   return (
     <div className="section-padding max-w-7xl mx-auto">
-      <Link to="/clubs" className="btn btn-ghost gap-2 mb-6">
-        <FiArrowLeft /> Back to Clubs
+      <Link to="/clubs" className="btn btn-ghost text-[#38909D] gap-2 mb-6">
+        <FiArrowLeft /> Back to <span className="text-[#F6851F]">Clubs</span>
       </Link>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -176,7 +195,9 @@ const ClubDetails = () => {
             <img
               src={
                 club.bannerImage ||
-                `https://placehold.co/800x400/2563eb/ffffff?text=${encodeURIComponent(club.clubName)}`
+                `https://placehold.co/800x400/2563eb/ffffff?text=${encodeURIComponent(
+                  club.clubName
+                )}`
               }
               alt={club.clubName}
               className="w-full h-full object-cover"
@@ -185,9 +206,9 @@ const ClubDetails = () => {
 
           {/* Info */}
           <div>
-            <div className="badge badge-primary mb-2">{club.category}</div>
+            <div className="badge bg-[#38909D] text-white mb-2">{club.category}</div>
             <h1 className="text-3xl font-bold mb-4">{club.clubName}</h1>
-            <div className="flex flex-wrap gap-4 text-base-content/70 mb-6">
+            <div className="flex flex-wrap gap-4 mb-6 text-[#053f48] ">
               <span className="flex items-center gap-2">
                 <FiMapPin /> {club.location}
               </span>
@@ -207,7 +228,11 @@ const ClubDetails = () => {
               <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
               <div className="space-y-4">
                 {events.slice(0, 3).map((event) => (
-                  <Link key={event._id} to={`/events/${event._id}`} className="card bg-base-100 shadow-sm card-hover">
+                  <Link
+                    key={event._id}
+                    to={`/events/${event._id}`}
+                    className="card bg-base-100 shadow-sm card-hover"
+                  >
                     <div className="card-body p-4 flex-row items-center justify-between">
                       <div>
                         <h3 className="font-semibold">{event.title}</h3>
@@ -215,7 +240,9 @@ const ClubDetails = () => {
                           {format(new Date(event.eventDate), "MMM dd, yyyy")}
                         </p>
                       </div>
-                      <span className="badge badge-secondary">{event.isPaid ? `$${event.eventFee}` : "Free"}</span>
+                      <span className="badge badge-secondary">
+                        {event.isPaid ? `$${event.eventFee}` : "Free"}
+                      </span>
                     </div>
                   </Link>
                 ))}
@@ -230,16 +257,18 @@ const ClubDetails = () => {
             <div className="card-body">
               <h2 className="card-title">
                 <FiDollarSign />
-                {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"} / membership
+                {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"} /
+                <span className="text-[#F6851F]">Membership</span>
               </h2>
 
               {membership ? (
                 <div className="space-y-4">
-                  <div className="alert alert-success">
+                  <div className="alert bg-[#38909D] text-white">
                     <span>You are already a member!</span>
                   </div>
                   <p className="text-sm text-base-content/60">
-                    Joined on {format(new Date(membership.joinedAt), "MMM dd, yyyy")}
+                    Joined on{" "}
+                    {format(new Date(membership.joinedAt), "MMM dd, yyyy")}
                   </p>
                 </div>
               ) : showPayment && club.membershipFee > 0 ? (
@@ -247,20 +276,24 @@ const ClubDetails = () => {
                   <PaymentForm
                     club={club}
                     onSuccess={() => {
-                      setShowPayment(false)
-                      queryClient.invalidateQueries(["membership", id])
+                      setShowPayment(false);
+                      queryClient.invalidateQueries(["membership", id]);
                     }}
                   />
                 </Elements>
               ) : (
-                <button onClick={handleJoin} disabled={joinMutation.isPending} className="btn btn-primary w-full">
+                <button
+                  onClick={handleJoin}
+                  disabled={joinMutation.isPending}
+                  className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full"
+                >
                   {joinMutation.isPending ? "Joining..." : "Join Club"}
                 </button>
               )}
 
               {!user && (
                 <p className="text-sm text-center text-base-content/60">
-                  <Link to="/login" className="link link-primary">
+                  <Link to="/login" className="link link-primary"> 
                     Login
                   </Link>{" "}
                   to join this club
@@ -271,7 +304,7 @@ const ClubDetails = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ClubDetails
+export default ClubDetails;

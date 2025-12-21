@@ -173,7 +173,7 @@ const CreateEvent = () => {
 
             <div className="form-control">
               <label className="label cursor-pointer justify-start gap-3">
-                <input type="checkbox" className="checkbox checkbox-primary" {...register("isPaid")} />
+                <input type="checkbox" className=" accent-[#38909D]" {...register("isPaid")} />
                 <span className="label-text">This is a paid event</span>
               </label>
             </div>
@@ -202,7 +202,7 @@ const CreateEvent = () => {
               </div>
             )}
 
-            <button type="submit" className="btn btn-primary w-full" disabled={createMutation.isPending}>
+            <button type="submit" className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full" disabled={createMutation.isPending}>
               {createMutation.isPending ? "Creating..." : "Create Event"}
             </button>
           </form>

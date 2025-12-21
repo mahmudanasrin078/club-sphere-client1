@@ -21,7 +21,7 @@ const MyEvents = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">My Events</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">My <span className="text-[#F6851F]">Events</span></h1>
 
       {registrations.length > 0 ? (
         <div className="card bg-base-100 shadow-sm overflow-x-auto">
@@ -42,7 +42,7 @@ const MyEvents = () => {
                   <td>{reg.club?.clubName}</td>
                   <td>{format(new Date(reg.event?.eventDate), "MMM dd, yyyy h:mm a")}</td>
                   <td>
-                    <span className={`badge ${reg.status === "registered" ? "badge-success" : "badge-error"}`}>
+                    <span className={`badge ${reg.status === "registered" ? "badge-success " : "badge-error"}`}>
                       {reg.status}
                     </span>
                   </td>

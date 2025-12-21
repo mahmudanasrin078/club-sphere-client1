@@ -52,7 +52,8 @@ const Events = () => {
   return (
     <div className="section-padding max-w-7xl mx-auto">
       <SectionTitle
-        title="Discover Events"
+        title="Discover"
+        span=' Events'
         subtitle="Find exciting events and activities happening in your community"
       />
 
@@ -61,11 +62,11 @@ const Events = () => {
         <label className="label cursor-pointer gap-2">
           <input
             type="checkbox"
-            className="checkbox checkbox-primary"
+            className="accent-[#38909D]"
             checked={showUpcoming}
             onChange={handleUpcomingToggle}
           />
-          <span className="label-text">Show upcoming only</span>
+          <span className="label-text ">Show upcoming only</span>
         </label>
 
         <select className="select select-bordered" value={sort} onChange={(e) => handleSortChange(e.target.value)}>

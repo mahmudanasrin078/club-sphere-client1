@@ -14,10 +14,10 @@ const ClubCard = ({ club }) => {
         />
       </figure>
       <div className="card-body p-4">
-        <div className="badge badge-primary badge-outline badge-sm mb-2">{club.category}</div>
+        <div className="badge bg-[#38909D] text-white p-3 badge-outline badge-sm mb-2">{club.category}</div>
         <h3 className="card-title text-lg">{club.clubName}</h3>
         <p className="text-sm text-base-content/70 line-clamp-2">{club.description}</p>
-        <div className="flex items-center gap-4 text-sm text-base-content/60 mt-2">
+        <div className="flex items-center gap-4 text-sm text-[#38909D] mt-2">
           <span className="flex items-center gap-1">
             <FiMapPin size={14} />
             {club.location}
@@ -30,11 +30,11 @@ const ClubCard = ({ club }) => {
           )}
         </div>
         <div className="card-actions justify-between items-center mt-4">
-          <span className="flex items-center gap-1 font-semibold">
+          <span className="flex items-center  text-[#F6851F] gap-1 font-semibold">
             <FiDollarSign size={16} />
-            {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"}
+            {club.membershipFee > 0 ? ` $${club.membershipFee}` : "Free "}
           </span>
-          <Link to={`/clubs/${club._id}`} className="btn btn-primary btn-sm">
+          <Link to={`/clubs/${club._id}`} className="btn bg-[#38909D] text-white hover:bg-[#F6851F] btn-sm">
             View Details
           </Link>
         </div>

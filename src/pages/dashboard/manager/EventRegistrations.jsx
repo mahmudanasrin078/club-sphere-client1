@@ -23,11 +23,11 @@ const EventRegistrations = () => {
 
   return (
     <div>
-      <Link to="/dashboard/manager/events" className="btn btn-ghost gap-2 mb-4">
+      <Link to="/dashboard/manager/events" className="btn btn-ghost  text-[#38909D] gap-2 mb-4">
         <FiArrowLeft /> Back to Events
       </Link>
 
-      <h1 className="text-2xl font-bold mb-6">Event Registrations</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Event <span className="text-[#F6851F]">Registrations</span></h1>
 
       <div className="card bg-base-100 shadow-sm overflow-x-auto">
         <table className="table">
