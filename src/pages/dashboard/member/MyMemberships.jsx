@@ -22,7 +22,7 @@ const MyMemberships = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">My Clubs</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">My <span className="text-[#F6851F] ">Clubs</span></h1>
 
       {memberships.length > 0 ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -45,14 +45,14 @@ const MyMemberships = () => {
                   {membership.club?.location}
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                  <span className={`badge ${membership.status === "active" ? "badge-success" : "badge-warning"}`}>
+                  <span className={`badge text-white ${membership.status === "active" ? "badge-success" : "badge-warning"}`}>
                     {membership.status}
                   </span>
                   <span className="text-xs text-base-content/60">
                     Joined {format(new Date(membership.joinedAt), "MMM dd, yyyy")}
                   </span>
                 </div>
-                <Link to={`/clubs/${membership.club?._id}`} className="btn btn-primary btn-sm mt-2">
+                <Link to={`/clubs/${membership.club?._id}`} className="btn bg-[#38909D] text-white hover:bg-[#F6851F] btn-sm mt-2">
                   View Club
                 </Link>
               </div>
@@ -62,7 +62,7 @@ const MyMemberships = () => {
       ) : (
         <div className="text-center py-12">
           <p className="text-base-content/60 mb-4">You haven't joined any clubs yet</p>
-          <Link to="/clubs" className="btn btn-primary">
+          <Link to="/clubs" className="btn bg-[#38909D] text-white hover:bg-[#F6851F]">
             Browse Clubs
           </Link>
         </div>

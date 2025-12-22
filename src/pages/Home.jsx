@@ -101,10 +101,10 @@ const Home = () => {
                 connections with people who share your passion.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/clubs" className="btn bg-[#38909D] btn-lg">
+                <Link to="/clubs" className="btn  bg-[#38909D] text-white hover:bg-[#F6851F] btn-lg">
                   Join a Club
                 </Link>
-                <Link to="/register" className="btn  btn-lg hover:bg-[#F6851F]">
+                <Link to="/register" className="btn  btn-lg  bg-[#F6851F] text-white hover:bg-[#38909D]">
                   Create a Club
                 </Link>
               </div>

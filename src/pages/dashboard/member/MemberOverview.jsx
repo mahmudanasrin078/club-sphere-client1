@@ -1,4 +1,4 @@
-"use client"
+
 
 import { Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
@@ -24,7 +24,7 @@ const MemberOverview = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Welcome Back!</h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Welcome <span className="   text-[#F6851F]">Back!</span></h1>
 
       <div className="grid sm:grid-cols-2 gap-4 mb-8">
         <StatCard title="Clubs Joined" value={stats?.totalClubs || 0} icon={HiOutlineBuildingOffice2} color="primary" />
