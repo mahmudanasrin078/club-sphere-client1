@@ -11,7 +11,7 @@ const DashboardLayout = () => {
   return (
     <div className="min-h-screen bg-base-200 max-w-7xl mx-auto">
       <DashboardSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-      <div className="lg:ml-[120px]">
+      <div className="lg:ml-64">
         <DashboardTopbar onMenuClick={() => setSidebarOpen(true)} />
         <main className="p-4 md:p-6">
           <Outlet />

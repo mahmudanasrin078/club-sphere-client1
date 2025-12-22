@@ -14,6 +14,14 @@ https://server-jet-nine-36.vercel.app/
 
 # member email: barek5@admin1test.com - password:123456Az
 
+GitHub Repository (Server):
+
+Public repo URL: https://github.com/mahmudanasrin078/club-sphere-server1
+
+GitHub Repository (Client):
+
+Public repo URL: https://github.com/mahmudanasrin078/club-sphere-client1
+
 # ClubSphere
 
 ClubSphere is a full-stack web application designed to manage local clubs, memberships, and events. Users can register, log in, join clubs, and access role-based dashboards. The system uses Firebase Authentication and a secure backend API.
