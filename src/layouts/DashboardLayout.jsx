@@ -1,12 +1,10 @@
-
-
-import { Outlet } from "react-router-dom"
-import DashboardSidebar from "../components/dashboard/DashboardSidebar"
-import DashboardTopbar from "../components/dashboard/DashboardTopbar"
-import { useState } from "react"
+import { Outlet } from "react-router-dom";
+import DashboardSidebar from "../components/dashboard/DashboardSidebar";
+import DashboardTopbar from "../components/dashboard/DashboardTopbar";
+import { useState } from "react";
 
 const DashboardLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-base-200 max-w-7xl mx-auto">
@@ -18,7 +16,7 @@ const DashboardLayout = () => {
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DashboardLayout
+export default DashboardLayout;

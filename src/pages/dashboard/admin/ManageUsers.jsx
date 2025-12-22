@@ -1,43 +1,41 @@
-
-
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useAxiosSecure } from "../../../hooks/useAxiosSecure"
-import { useAuth } from "../../../hooks/useAuth"
-import LoadingSpinner from "../../../components/common/LoadingSpinner"
-import toast from "react-hot-toast"
-import Swal from "sweetalert2"
-import { format } from "date-fns"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAxiosSecure } from "../../../hooks/useAxiosSecure";
+import { useAuth } from "../../../hooks/useAuth";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const ManageUsers = () => {
-  const axiosSecure = useAxiosSecure()
-  const queryClient = useQueryClient()
-  const { dbUser } = useAuth()
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+  const { dbUser } = useAuth();
 
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["adminUsers"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/admin/users")
-      return res.data
+      const res = await axiosSecure.get("/admin/users");
+      return res.data;
     },
-  })
+  });
 
   const updateRoleMutation = useMutation({
     mutationFn: async ({ email, role }) => {
-      return axiosSecure.patch(`/admin/users/${email}/role`, { role })
+      return axiosSecure.patch(`/admin/users/${email}/role`, { role });
     },
     onSuccess: () => {
-      toast.success("Role updated successfully")
-      queryClient.invalidateQueries(["adminUsers"])
+      toast.success("Role updated successfully");
+      queryClient.invalidateQueries(["adminUsers"]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to update role")
+      toast.error(error.response?.data?.message || "Failed to update role");
     },
-  })
+  });
 
   const handleRoleChange = async (user, newRole) => {
     if (user.email === dbUser.email) {
-      toast.error("You cannot change your own role")
-      return
+      toast.error("You cannot change your own role");
+      return;
     }
 
     const result = await Swal.fire({
@@ -46,21 +44,25 @@ const ManageUsers = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, change it!",
-    })
+    });
 
     if (result.isConfirmed) {
-      updateRoleMutation.mutate({ email: user.email, role: newRole })
+      updateRoleMutation.mutate({ email: user.email, role: newRole });
     }
-  }
+  };
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
+ 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Manage <span className="text-[#F6851F]">Users</span></h1>
+      <h1 className="text-2xl font-bold mb-6">
+        Manage <span className="text-[#F6851F]">Users</span>
+      </h1>
 
-      <div className="card bg-base-100 shadow-sm overflow-x-auto">
-        <table className="table">
+      {/*  DESKTOP  */}
+      <div className="hidden md:block card bg-base-100 shadow-sm overflow-x-auto">
+        <table className="table min-w-[800px]">
           <thead>
             <tr>
               <th>User</th>
@@ -70,40 +72,42 @@ const ManageUsers = () => {
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {users.map((user) => (
               <tr key={user._id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="w-10 rounded-full">
-                        <img
-                          src={
-                            user.photoURL ||
-                            `https://ui-avatars.com/api/?name=${user.name || "/placeholder.svg"}&background=2563eb&color=fff`
-                          }
-                          alt={user.name}
-                        />
-                      </div>
-                    </div>
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src={
+                        user.photoURL ||
+                        `https://ui-avatars.com/api/?name=${user.name}&background=2563eb&color=fff`
+                      }
+                      alt={user.name}
+                    />
                     <span className="font-medium">{user.name}</span>
                   </div>
                 </td>
+
                 <td>{user.email}</td>
+
                 <td>
                   <span
                     className={`badge ${
                       user.role === "admin"
                         ? "bg-[#F6851F] text-white"
                         : user.role === "clubManager"
-                          ? "bg-[#49022dc2] text-white"
-                          : "bg-[#38909D] text-white"
+                        ? "bg-[#49022dc2] text-white"
+                        : "bg-[#38909D] text-white"
                     }`}
                   >
                     {user.role === "clubManager" ? "Manager" : user.role}
                   </span>
                 </td>
+
                 <td>{format(new Date(user.createdAt), "MMM dd, yyyy")}</td>
+
                 <td>
                   <select
                     className="select select-bordered select-sm"
@@ -121,8 +125,62 @@ const ManageUsers = () => {
           </tbody>
         </table>
       </div>
-    </div>
-  )
-}
 
-export default ManageUsers
+      {/*  MOBILE VIEW */}
+      <div className="md:hidden space-y-4">
+        {users.map((user) => (
+          <div
+            key={user._id}
+            className="bg-base-100 rounded-lg shadow p-4 space-y-3"
+          >
+            <div className="flex items-center gap-3">
+              <img
+                className="w-12 h-12 rounded-full"
+                src={
+                  user.photoURL ||
+                  `https://ui-avatars.com/api/?name=${user.name}&background=2563eb&color=fff`
+                }
+                alt={user.name}
+              />
+              <div>
+                <h3 className="font-semibold">{user.name}</h3>
+                <p className="text-sm text-gray-500">{user.email}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <span
+                className={`badge ${
+                  user.role === "admin"
+                    ? "bg-[#F6851F] text-white"
+                    : user.role === "clubManager"
+                    ? "bg-[#49022dc2] text-white"
+                    : "bg-[#38909D] text-white"
+                }`}
+              >
+                {user.role === "clubManager" ? "Manager" : user.role}
+              </span>
+
+              <span className="text-gray-500">
+                {format(new Date(user.createdAt), "MMM dd, yyyy")}
+              </span>
+            </div>
+
+            <select
+              className="select select-bordered select-sm w-full"
+              value={user.role}
+              onChange={(e) => handleRoleChange(user, e.target.value)}
+              disabled={user.email === dbUser.email}
+            >
+              <option value="member">Member</option>
+              <option value="clubManager">Manager</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ManageUsers;

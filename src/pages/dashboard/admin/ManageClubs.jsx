@@ -59,14 +59,16 @@ const ManageClubs = () => {
 
   if (isLoading) return <LoadingSpinner />;
 
+  
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#38909D] mb-6">
         Manage <span className="text-[#F6851F]">Clubs</span>
       </h1>
 
-      <div className="card bg-base-100 shadow-sm overflow-x-auto">
-        <table className="table">
+      {/* DESKTOP  */}
+      <div className="hidden md:block card bg-base-100 shadow-sm overflow-x-auto">
+        <table className="table min-w-[900px]">
           <thead>
             <tr>
               <th>Club</th>
@@ -78,65 +80,61 @@ const ManageClubs = () => {
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {clubs.map((club) => (
               <tr key={club._id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="w-12 rounded">
-                        <img
-                          src={
-                            club.bannerImage ||
-                            `https://placehold.co/48x48/2563eb/ffffff?text=${
-                              club.clubName.charAt(0) || "/placeholder.svg"
-                            }`
-                          }
-                          alt={club.clubName}
-                        />
-                      </div>
+                    <div className="w-12 h-12 rounded overflow-hidden">
+                      <img
+                        src={
+                          club.bannerImage ||
+                          `https://placehold.co/48x48/2563eb/ffffff?text=${club.clubName.charAt(
+                            0
+                          )}`
+                        }
+                        alt={club.clubName}
+                      />
                     </div>
                     <div>
                       <p className="font-medium">{club.clubName}</p>
-                      <p className="text-xs text-base-content/60">
-                        {club.category}
-                      </p>
+                      <p className="text-xs text-gray-500">{club.category}</p>
                     </div>
                   </div>
                 </td>
+
                 <td className="text-sm">{club.managerEmail}</td>
                 <td>
                   {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"}
                 </td>
-                <td>
-                  <span className="flex items-center gap-1">
-                    <FiUsers size={14} /> {club.membersCount || 0}
-                  </span>
+
+                <td className="flex items-center gap-1">
+                  <FiUsers size={14} /> {club.membersCount || 0}
                 </td>
-                <td>
-                  <span className="flex items-center gap-1">
-                    <FiCalendar size={14} /> {club.eventsCount || 0}
-                  </span>
+
+                <td className="flex items-center gap-1">
+                  <FiCalendar size={14} /> {club.eventsCount || 0}
                 </td>
+
                 <td>
                   <span className={`badge ${getStatusBadge(club.status)}`}>
                     {club.status}
                   </span>
                 </td>
+
                 <td>
                   {club.status === "pending" && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleStatusChange(club, "approved")}
                         className="btn bg-[#38909D] text-white btn-xs"
-                        disabled={updateStatusMutation.isPending}
                       >
                         <FiCheck />
                       </button>
                       <button
                         onClick={() => handleStatusChange(club, "rejected")}
                         className="btn bg-red-500 text-white btn-xs"
-                        disabled={updateStatusMutation.isPending}
                       >
                         <FiX />
                       </button>
@@ -147,6 +145,72 @@ const ManageClubs = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/*  MOBILE VIEW */}
+      <div className="md:hidden space-y-4">
+        {clubs.map((club) => (
+          <div
+            key={club._id}
+            className="bg-base-100 rounded-lg shadow p-4 space-y-3"
+          >
+            <div className="flex items-center gap-3">
+              <img
+                className="w-14 h-14 rounded object-cover"
+                src={
+                  club.bannerImage ||
+                  `https://placehold.co/56x56/2563eb/ffffff?text=${club.clubName.charAt(
+                    0
+                  )}`
+                }
+                alt={club.clubName}
+              />
+              <div>
+                <h3 className="font-semibold">{club.clubName}</h3>
+                <p className="text-sm text-gray-500">{club.category}</p>
+              </div>
+            </div>
+
+            <p className="text-sm">
+              <strong>Manager:</strong> {club.managerEmail}
+            </p>
+
+            <div className="flex justify-between text-sm">
+              <span>
+                💰 {club.membershipFee > 0 ? `$${club.membershipFee}` : "Free"}
+              </span>
+              <span className="flex items-center gap-1">
+                <FiUsers /> {club.membersCount || 0}
+              </span>
+              <span className="flex items-center gap-1">
+                <FiCalendar /> {club.eventsCount || 0}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className={`badge ${getStatusBadge(club.status)}`}>
+                {club.status}
+              </span>
+
+              {club.status === "pending" && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleStatusChange(club, "approved")}
+                    className="btn btn-xs bg-[#38909D] text-white"
+                  >
+                    <FiCheck />
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(club, "rejected")}
+                    className="btn btn-xs bg-red-500 text-white"
+                  >
+                    <FiX />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

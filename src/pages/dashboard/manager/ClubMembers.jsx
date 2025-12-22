@@ -1,48 +1,53 @@
-
-
-import { useParams, Link } from "react-router-dom"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useAxiosSecure } from "../../../hooks/useAxiosSecure"
-import LoadingSpinner from "../../../components/common/LoadingSpinner"
-import toast from "react-hot-toast"
-import { format } from "date-fns"
-import { FiArrowLeft } from "react-icons/fi"
+import { useParams, Link } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAxiosSecure } from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import { format } from "date-fns";
+import { FiArrowLeft } from "react-icons/fi";
 
 const ClubMembers = () => {
-  const { id } = useParams()
-  const axiosSecure = useAxiosSecure()
-  const queryClient = useQueryClient()
+  const { id } = useParams();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["clubMembers", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/clubs/${id}/members`)
-      return res.data
+      const res = await axiosSecure.get(`/clubs/${id}/members`);
+      return res.data;
     },
-  })
+  });
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ membershipId, status }) => {
-      return axiosSecure.patch(`/memberships/${membershipId}/status`, { status })
+      return axiosSecure.patch(`/memberships/${membershipId}/status`, {
+        status,
+      });
     },
     onSuccess: () => {
-      toast.success("Membership status updated")
-      queryClient.invalidateQueries(["clubMembers", id])
+      toast.success("Membership status updated");
+      queryClient.invalidateQueries(["clubMembers", id]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to update status")
+      toast.error(error.response?.data?.message || "Failed to update status");
     },
-  })
+  });
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div>
-      <Link to="/dashboard/manager/clubs" className="btn text-[#38909D] gap-2 mb-4">
+      <Link
+        to="/dashboard/manager/clubs"
+        className="btn text-[#38909D] gap-2 mb-4"
+      >
         <FiArrowLeft /> Back to Clubs
       </Link>
 
-      <h1 className="text-2xl text-[#38909D] font-bold mb-6">Club <span className="text-[#F6851F]">Members</span></h1>
+      <h1 className="text-2xl text-[#38909D] font-bold mb-6">
+        Club <span className="text-[#F6851F]">Members</span>
+      </h1>
 
       <div className="card bg-base-100 shadow-sm overflow-x-auto">
         <table className="table">
@@ -66,7 +71,9 @@ const ClubMembers = () => {
                           <img
                             src={
                               member.user?.photoURL ||
-                              `https://ui-avatars.com/api/?name=${member.user?.name || "User"}&background=2563eb&color=fff`
+                              `https://ui-avatars.com/api/?name=${
+                                member.user?.name || "User"
+                              }&background=2563eb&color=fff`
                             }
                             alt={member.user?.name}
                           />
@@ -78,7 +85,13 @@ const ClubMembers = () => {
                   <td>{member.userEmail}</td>
                   <td>
                     <span
-                      className={`badge ${member.status === "active" ? "badge-success" : member.status === "expired" ? "badge-error" : "badge-warning"}`}
+                      className={`badge ${
+                        member.status === "active"
+                          ? "badge-success"
+                          : member.status === "expired"
+                          ? "badge-error"
+                          : "badge-warning"
+                      }`}
                     >
                       {member.status}
                     </span>
@@ -104,7 +117,10 @@ const ClubMembers = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-8 text-base-content/60">
+                <td
+                  colSpan={5}
+                  className="text-center py-8 text-base-content/60"
+                >
                   No members yet
                 </td>
               </tr>
@@ -113,7 +129,7 @@ const ClubMembers = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ClubMembers
+export default ClubMembers;

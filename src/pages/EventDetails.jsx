@@ -1,62 +1,78 @@
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { axiosPublic } from "../api/axiosSecure";
+import { useAuth } from "../hooks/useAuth";
+import { useAxiosSecure } from "../hooks/useAxiosSecure";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { useState } from "react";
+import {
+  FiMapPin,
+  FiUsers,
+  FiDollarSign,
+  FiCalendar,
+  FiArrowLeft,
+  FiClock,
+} from "react-icons/fi";
+import { format } from "date-fns";
 
-
-import { useParams, Link, useNavigate } from "react-router-dom"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { loadStripe } from "@stripe/stripe-js"
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js"
-import { axiosPublic } from "../api/axiosSecure"
-import { useAuth } from "../hooks/useAuth"
-import { useAxiosSecure } from "../hooks/useAxiosSecure"
-import LoadingSpinner from "../components/common/LoadingSpinner"
-import toast from "react-hot-toast"
-import Swal from "sweetalert2"
-import { useState } from "react"
-import { FiMapPin, FiUsers, FiDollarSign, FiCalendar, FiArrowLeft, FiClock } from "react-icons/fi"
-import { format } from "date-fns"
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const EventPaymentForm = ({ event, onSuccess }) => {
-  const stripe = useStripe()
-  const elements = useElements()
-  const axiosSecure = useAxiosSecure()
-  const [processing, setProcessing] = useState(false)
+  const stripe = useStripe();
+  const elements = useElements();
+  const axiosSecure = useAxiosSecure();
+  const [processing, setProcessing] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
+    e.preventDefault();
+    if (!stripe || !elements) return;
 
-    setProcessing(true)
+    setProcessing(true);
 
     try {
-      const { data } = await axiosSecure.post("/payments/create-event-payment-intent", {
-        eventId: event._id,
-      })
+      const { data } = await axiosSecure.post(
+        "/payments/create-event-payment-intent",
+        {
+          eventId: event._id,
+        }
+      );
 
-      const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      })
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        data.clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+          },
+        }
+      );
 
       if (error) {
-        toast.error(error.message)
+        toast.error(error.message);
       } else if (paymentIntent.status === "succeeded") {
         await axiosSecure.post("/payments/confirm", {
           paymentIntentId: paymentIntent.id,
           type: "event",
           eventId: event._id,
           clubId: event.clubId,
-        })
-        toast.success("Payment successful! You're registered!")
-        onSuccess()
+        });
+        toast.success("Payment successful! You're registered!");
+        onSuccess();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Payment failed")
+      toast.error(error.response?.data?.message || "Payment failed");
     } finally {
-      setProcessing(false)
+      setProcessing(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,60 +89,64 @@ const EventPaymentForm = ({ event, onSuccess }) => {
           }}
         />
       </div>
-      <button type="submit" disabled={!stripe || processing} className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full">
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full"
+      >
         {processing ? "Processing..." : `Pay $${event.eventFee}`}
       </button>
     </form>
-  )
-}
+  );
+};
 
 const EventDetails = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const { user } = useAuth()
-  const axiosSecure = useAxiosSecure()
-  const queryClient = useQueryClient()
-  const [showPayment, setShowPayment] = useState(false)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+  const [showPayment, setShowPayment] = useState(false);
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", id],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/events/${id}`)
-      return res.data
+      const res = await axiosPublic.get(`/events/${id}`);
+      return res.data;
     },
-  })
+  });
 
   const { data: registration } = useQuery({
     queryKey: ["eventRegistration", id, user?.email],
     queryFn: async () => {
-      if (!user) return null
-      const res = await axiosSecure.get("/member/registrations")
-      return res.data.find((r) => r.eventId.toString() === id)
+      if (!user) return null;
+      const res = await axiosSecure.get("/member/registrations");
+      return res.data.find((r) => r.eventId.toString() === id);
     },
     enabled: !!user,
-  })
+  });
 
   const registerMutation = useMutation({
     mutationFn: async () => {
-      return axiosSecure.post(`/events/${id}/register`)
+      return axiosSecure.post(`/events/${id}/register`);
     },
     onSuccess: () => {
-      toast.success("Successfully registered for the event!")
-      queryClient.invalidateQueries(["eventRegistration", id])
+      toast.success("Successfully registered for the event!");
+      queryClient.invalidateQueries(["eventRegistration", id]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to register")
+      toast.error(error.response?.data?.message || "Failed to register");
     },
-  })
+  });
 
   const handleRegister = async () => {
     if (!user) {
-      navigate("/login", { state: { from: `/events/${id}` } })
-      return
+      navigate("/login", { state: { from: `/events/${id}` } });
+      return;
     }
 
     if (event.isPaid && event.eventFee > 0) {
-      setShowPayment(true)
+      setShowPayment(true);
     } else {
       const result = await Swal.fire({
         title: "Register for Event",
@@ -134,15 +154,15 @@ const EventDetails = () => {
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Yes, Register!",
-      })
+      });
 
       if (result.isConfirmed) {
-        registerMutation.mutate()
+        registerMutation.mutate();
       }
     }
-  }
+  };
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   if (!event) {
     return (
@@ -152,12 +172,13 @@ const EventDetails = () => {
           Browse Events
         </Link>
       </div>
-    )
+    );
   }
 
-  const eventDate = new Date(event.eventDate)
-  const isPast = eventDate < new Date()
-  const isFull = event.maxAttendees && event.registrationsCount >= event.maxAttendees
+  const eventDate = new Date(event.eventDate);
+  const isPast = eventDate < new Date();
+  const isFull =
+    event.maxAttendees && event.registrationsCount >= event.maxAttendees;
 
   return (
     <div className="section-padding max-w-7xl mx-auto">
@@ -170,10 +191,17 @@ const EventDetails = () => {
         <div className="lg:col-span-2 space-y-6">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              <Link to={`/clubs/${event.club?._id}`} className="badge bg-[#38909D] text-white badge-lg">
+              <Link
+                to={`/clubs/${event.club?._id}`}
+                className="badge bg-[#38909D] text-white badge-lg"
+              >
                 {event.club?.clubName}
               </Link>
-              {event.isPaid && <span className="badge bg-[#F6851F] text-white">Paid Event</span>}
+              {event.isPaid && (
+                <span className="badge bg-[#F6851F] text-white">
+                  Paid Event
+                </span>
+              )}
               {isPast && <span className="badge badge-error">Past Event</span>}
             </div>
 
@@ -184,7 +212,9 @@ const EventDetails = () => {
                 <FiCalendar className="text-[#38909D]" size={24} />
                 <div>
                   <p className="text-sm text-base-content/60">Date</p>
-                  <p className="font-semibold">{format(eventDate, "EEEE, MMMM dd, yyyy")}</p>
+                  <p className="font-semibold">
+                    {format(eventDate, "EEEE, MMMM dd, yyyy")}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
@@ -207,14 +237,17 @@ const EventDetails = () => {
                   <p className="text-sm text-base-content/60">Attendees</p>
                   <p className="font-semibold">
                     {event.registrationsCount || 0}
-                    {event.maxAttendees ? ` / ${event.maxAttendees}` : ""} Registered
+                    {event.maxAttendees ? ` / ${event.maxAttendees}` : ""}{" "}
+                    Registered
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="prose max-w-none">
-              <h2 className="text-2xl mb-3 font-bold text-[#38909D]">About this <span className="text-[#F6851F] ">event</span></h2>
+              <h2 className="text-2xl mb-3 font-bold text-[#38909D]">
+                About this <span className="text-[#F6851F] ">event</span>
+              </h2>
               <p>{event.description}</p>
             </div>
           </div>
@@ -226,7 +259,9 @@ const EventDetails = () => {
             <div className="card-body">
               <h2 className="card-title text-[#F6851F] ">
                 <FiDollarSign />
-                {event.isPaid && event.eventFee > 0 ? `${event.eventFee}` : "Free"} 
+                {event.isPaid && event.eventFee > 0
+                  ? `${event.eventFee}`
+                  : "Free"}
               </h2>
 
               {registration ? (
@@ -235,7 +270,11 @@ const EventDetails = () => {
                     <span>You are registered!</span>
                   </div>
                   <p className="text-sm text-base-content/60">
-                    Registered on {format(new Date(registration.registeredAt), "MMM dd, yyyy")}
+                    Registered on{" "}
+                    {format(
+                      new Date(registration.registeredAt),
+                      "MMM dd, yyyy"
+                    )}
                   </p>
                 </div>
               ) : isPast ? (
@@ -251,8 +290,8 @@ const EventDetails = () => {
                   <EventPaymentForm
                     event={event}
                     onSuccess={() => {
-                      setShowPayment(false)
-                      queryClient.invalidateQueries(["eventRegistration", id])
+                      setShowPayment(false);
+                      queryClient.invalidateQueries(["eventRegistration", id]);
                     }}
                   />
                 </Elements>
@@ -262,7 +301,9 @@ const EventDetails = () => {
                   disabled={registerMutation.isPending}
                   className="btn bg-[#38909D] text-white hover:bg-[#F6851F] w-full"
                 >
-                  {registerMutation.isPending ? "Registering..." : "Register Now"}
+                  {registerMutation.isPending
+                    ? "Registering..."
+                    : "Register Now"}
                 </button>
               )}
 
@@ -279,7 +320,7 @@ const EventDetails = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EventDetails
+export default EventDetails;
