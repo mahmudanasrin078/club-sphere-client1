@@ -90,7 +90,7 @@ const Footer = () => {
         <div className="divider my-8"></div>
 
         <div className="text-center text-base-content/60 text-sm">
-          <p>
+          <p className="text-gray-500">
             &copy; {new Date().getFullYear()} ClubSphere. All rights reserved.
           </p>
         </div>
